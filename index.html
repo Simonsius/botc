@@ -3,103 +3,240 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-  <!-- iOS Web-App Einstellungen -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Trouble Brewing">
-
-  <!-- Homescreen Icon (1024x1024, quadratisch, ohne Transparenz) -->
-  <link rel="apple-touch-icon" href="icon.png">
-
   <title>Trouble Brewing Ablauf</title>
+
+  <!-- Mystische Schriftarten -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+
   <style>
+  body {
+    font-family: 'Cinzel', serif;
+    margin: 0;
+    padding: 15px;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+    color: #f0e6d2;
+    font-size: 16px;
+    background-attachment: fixed;
+    background-size: cover;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Uncial Antiqua', cursive;
+    text-align: center;
+    color: #d32f2f;
+    text-shadow: 0 0 6px rgba(0,0,0,0.8);
+  }
+  h1 { font-size: 2em; margin-bottom: 20px; }
+  h2 { font-size: 1.4em; margin: 10px 0; }
+  h3 { font-size: 1.2em; }
+
+  button {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    padding: 10px 16px;
+    margin: 6px;
+    border-radius: 10px;
+    border: 2px solid #a11;
+    background: linear-gradient(180deg, #b71c1c, #7f0000);
+    color: #f8f8f8;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+    transition: transform 0.15s, background 0.3s;
+    min-height: 44px;
+  }
+  button:hover {
+    background: linear-gradient(180deg, #d32f2f, #8b0000);
+    transform: scale(1.05);
+  }
+
+  select, input, textarea {
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    margin: 6px 0;
+    padding: 10px;
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #555;
+    background: #222;
+    color: #f0e6d2;
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+  textarea {
+    resize: vertical;
+  }
+
+  .runde-box, .notiz-box {
+    margin: 15px 0;
+    padding: 15px;
+    background: rgba(30, 30, 30, 0.95);
+    border-radius: 15px;
+    border: 1px solid #444;
+    box-shadow: 0 0 10px rgba(255,0,0,0.3);
+  }
+
+  .historie {
+    margin-top: 25px;
+    padding: 15px;
+    background: rgba(20,20,20,0.9);
+    border-radius: 15px;
+    border: 1px solid #555;
+    box-shadow: inset 0 0 10px rgba(200,0,0,0.2);
+  }
+
+  /* Charakterauswahl kompakter */
+  #charaktere-liste {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 6px 12px;
+  }
+  #charaktere-liste div {
+    display: flex;
+    align-items: center;
+  }
+  #charaktere-liste label {
+    margin-left: 6px;
+  }
+
+  /* Aktionen kompakter */
+  .aktion { 
+    margin-bottom: 10px; 
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .aktion select,
+  .aktion input {
+    flex: 1 1 45%;
+    min-width: 120px;
+    font-size: 14px;
+    padding: 6px 8px;
+    min-height: 32px;
+  }
+  .aktion button {
+    flex: 0 0 auto;
+    font-size: 14px;
+    padding: 6px 10px;
+    min-height: 32px;
+    border-radius: 6px;
+  }
+
+  /* Mobile Optimierungen */
+  @media (max-width: 600px) {
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      margin: 10px;
-      background: #f5f5f5;
-      font-size: 16px;
+      font-size: 15px;
+      padding: 8px;
     }
-    h1 { 
-      text-align: center; 
-      font-size: 1.6em;
-      margin-bottom: 15px;
-    }
+    h1 { font-size: 1.6em; }
     button {
-      font-size: 18px;
-      padding: 12px 18px;
-      margin: 5px;
-      border-radius: 12px;
-      border: none;
-      background: #1976d2;
-      color: white;
-      cursor: pointer;
-      min-height: 44px; /* Fingerfreundlich */
+      font-size: 15px;
+      padding: 8px 12px;
+      min-height: 38px;
     }
-    button:hover { background: #0d47a1; }
-    select, input, textarea {
-      font-size: 18px;
-      margin: 6px 0;
+    .runde-box, .historie {
       padding: 10px;
+    }
+    .aktion {
+      flex-direction: column;
+      gap: 4px;
+    }
+    .aktion select,
+    .aktion input {
       width: 100%;
-      max-width: 100%;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      box-sizing: border-box;
-      min-height: 44px; /* Fingerfreundlich */
-    }
-    textarea {
-      resize: vertical;
-    }
-    .runde-box, .notiz-box {
-      margin: 12px 0;
-      padding: 12px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.2);
-    }
-    .historie {
-      margin-top: 20px;
-      padding: 12px;
-      background: #fff;
-      border-radius: 12px;
-      box-shadow: 0 0 6px rgba(0,0,0,0.2);
-    }
-    .aktion { 
-      margin-bottom: 12px; 
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .aktion select, .aktion input {
-      flex: 1 1 45%;
-      min-width: 140px;
+      flex: unset;
+      font-size: 13px;
+      padding: 5px 6px;
+      min-height: 30px;
     }
     .aktion button {
-      flex: 0 0 auto;
+      font-size: 13px;
+      padding: 5px 8px;
+      min-height: 30px;
     }
-    /* Mobile Optimierungen */
-    @media (max-width: 600px) {
-      body {
-        margin: 5px;
-        font-size: 15px;
-      }
-      button {
-        font-size: 16px;
-        padding: 10px 14px;
-      }
-      .runde-box, .historie {
-        padding: 10px;
-      }
-      .aktion {
-        flex-direction: column;
-      }
-      .aktion select, .aktion input {
-        width: 100%;
-        flex: unset;
-      }
-    }
-  </style>
+  }
+  
+  /* Popup */
+#popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 20px;
+  color: #fff;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(6px);
+}
+
+#popup h2 {
+  margin-bottom: 20px;
+  font-family: 'Cinzel', serif;
+  color: #f55;
+}
+
+#popup .grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 800px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+#popup button {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #a11;
+  background: linear-gradient(180deg, #b71c1c, #7f0000);
+  color: #f8f8f8;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  transition: transform 0.15s, background 0.3s;
+}
+
+#popup button:hover {
+  background: linear-gradient(180deg, #d32f2f, #8b0000);
+  transform: scale(1.05);
+}
+
+#popup .close-btn {
+  margin-top: 20px;
+  background: #444;
+  border: none;
+  padding: 10px 18px;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Auswahl-Bestätigung Animation */
+.auswahl-bestaetigt {
+  animation: highlight 0.6s ease-out;
+}
+@keyframes highlight {
+  from { background-color: rgba(0,255,0,0.3); }
+  to { background-color: transparent; }
+}
+
+/* Charakter-Icons */
+.charakter-box::before {
+  content: "👤 ";
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  #popup .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+</style>
+
 </head>
 <body>
 
@@ -129,6 +266,12 @@
   </div>
 </div>
 
+<div id="popup">
+  <h2 id="popup-title"></h2>
+  <div class="grid" id="popup-grid"></div>
+  <button class="close-btn" onclick="schliessePopup()">Abbrechen</button>
+</div>
+
 <div class="historie">
   <h2>Historie</h2>
   <div id="historie-liste"></div>
@@ -144,6 +287,23 @@ const alleCharaktere = [
   "Butler","Heilige","Einsiedler","Trunkenbold","Baron","Scharlachrote Frau",
   "Spion", "Giftmischer","Imp", "Falsche Fährte"
 ];
+
+const aktionenListe = ["nominiert", "tötet", "vergiftet", "bekommt Info über", "beschützt", "erschießt", "wird zu", "wird Butler von", "erscheint als", "stirbt"];
+
+const aktionenProCharakter = {
+  "Waschweib": ["bekommt Info über"],
+  "Bibliothekar": ["bekommt Info über"],
+  "Detektiv": ["bekommt Info über"],
+  "Koch": ["bekommt Info über"],
+  "Empath": ["bekommt Info über"],
+  "Wahrsagerin": ["bekommt Info über"],
+  "Soldat": ["beschützt"],
+  "Mönch": ["beschützt"],
+  "Giftmischer": ["vergiftet"],
+  "Imp": ["tötet"],
+  "Butler": ["wird Butler von"]
+  // Fügen Sie weitere Charaktere hinzu
+};
 
 let ausgewaehlteCharaktere = JSON.parse(localStorage.getItem("charaktere")) || [];
 let spieler = JSON.parse(localStorage.getItem("spieler")) || {};
@@ -173,17 +333,25 @@ function ladeCharaktere() {
   const liste = document.getElementById("charaktere-liste");
   liste.innerHTML = "";
   alleCharaktere.forEach(ch => {
+    const wrapper = document.createElement("div");
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
+
     const cb = document.createElement("input");
     cb.type = "checkbox";
     cb.value = ch;
     cb.checked = ausgewaehlteCharaktere.includes(ch);
+
     const lbl = document.createElement("label");
     lbl.textContent = ch;
-    liste.appendChild(cb);
-    liste.appendChild(lbl);
-    liste.appendChild(document.createElement("br"));
+    lbl.style.marginLeft = "6px";
+
+    wrapper.appendChild(cb);
+    wrapper.appendChild(lbl);
+    liste.appendChild(wrapper);
   });
 }
+
 function speichereCharaktere() {
   ausgewaehlteCharaktere = Array.from(document.querySelectorAll("#charaktere-liste input:checked")).map(cb => cb.value);
   localStorage.setItem("charaktere", JSON.stringify(ausgewaehlteCharaktere));
@@ -228,93 +396,110 @@ function speichereSpieler() {
   }
 }
 
+// Popup
+let aktuellesZielFeld = null;
+let popupModus = null;
+
+function oeffnePopup(zielFeld, modus, charName = null) {
+  aktuellesZielFeld = zielFeld;
+  popupModus = modus;
+
+  const title = document.getElementById("popup-title");
+  const grid = document.getElementById("popup-grid");
+  grid.innerHTML = "";
+
+  let items = [];
+  
+  if (modus === "charakter") {
+    items = ausgewaehlteCharaktere;
+    title.textContent = "Charakter wählen";
+  } 
+  else if (modus === "aktion") {
+    // IMMER alle Aktionen anzeigen, unabhängig vom Charakter
+    items = aktionenListe;
+    title.textContent = "Aktion wählen";
+  }
+
+  items.forEach(item => {
+    const btn = document.createElement("button");
+    btn.textContent = item;
+    btn.onclick = () => {
+      zielFeld.value = item;
+      zielFeld.classList.add("auswahl-bestaetigt");
+      setTimeout(() => zielFeld.classList.remove("auswahl-bestaetigt"), 600);
+      schliessePopup();
+    };
+    grid.appendChild(btn);
+  });
+
+  document.getElementById("popup").style.display = "flex";
+}
+
+function schliessePopup() {
+  document.getElementById("popup").style.display="none";
+  aktuellesZielFeld=null;
+  popupModus=null;
+}
 
 function neueAktion(vorwahlChar = null, vorwahlAktion = null) {
   const div = document.createElement("div");
   div.className = "aktion";
 
-  // Erstes Select (Charakter 1)
-  const select1 = document.createElement("select");
-  const optLeer1 = document.createElement("option");
-  optLeer1.textContent = "leer";
-  select1.appendChild(optLeer1);
-  ausgewaehlteCharaktere.forEach(c => {
-    const sp = spieler[c] ? ` (${spieler[c]})` : "";
-    const opt = document.createElement("option");
-    opt.textContent = c + sp;
-    select1.appendChild(opt);
-  });
+  // Ersetzen Sie die Select-Elemente durch Input-Felder mit Popup-Funktionalität
+  const feld1 = document.createElement("input");
+  feld1.readOnly = true;
+  feld1.placeholder = "Charakter wählen…";
+  feld1.onclick = () => oeffnePopup(feld1, "charakter");
 
-  // Zweites Select (Aktion)
-  const select2 = document.createElement("select");
-  ["nominiert","tötet","vergiftet","bekommt Info über","beschützt","erschießt","wird zu","wird Butler von","erscheint als","stirbt"].forEach(a => {
-    const opt = document.createElement("option");
-    opt.textContent = a;
-    select2.appendChild(opt);
-  });
+  const feldAktion = document.createElement("input");
+  feldAktion.readOnly = true;
+  feldAktion.placeholder = "Aktion wählen…";
+  feldAktion.onclick = () => {
+    const charName = feld1.value.split(" (")[0];
+    oeffnePopup(feldAktion, "aktion", charName);
+  };
 
-  // Automatische Vorauswahl für Waschweib
-  select1.addEventListener("change", () => {
-    if (select1.value.startsWith("Waschweib")) {
-      select2.value = "bekommt Info über";
-    }
-  });
+  const feld2 = document.createElement("input");
+  feld2.readOnly = true;
+  feld2.placeholder = "Ziel wählen…";
+  feld2.onclick = () => oeffnePopup(feld2, "charakter");
 
-  // Drittes Select (Charakter 2)
-  const select3 = document.createElement("select");
-  const optLeer3 = document.createElement("option");
-  optLeer3.textContent = "leer";
-  select3.appendChild(optLeer3);
-  ausgewaehlteCharaktere.forEach(c => {
-    const sp = spieler[c] ? ` (${spieler[c]})` : "";
-    const opt = document.createElement("option");
-    opt.textContent = c + sp;
-    select3.appendChild(opt);
-  });
-
-  // Viertes Select (optional weiterer Charakter)
-  const select4 = document.createElement("select");
-  const optLeer4 = document.createElement("option");
-  optLeer4.textContent = "leer";
-  select4.appendChild(optLeer4);
-  ausgewaehlteCharaktere.forEach(c => {
-    const sp = spieler[c] ? ` (${spieler[c]})` : "";
-    const opt = document.createElement("option");
-    opt.textContent = c + sp;
-    select4.appendChild(opt);
-  });
+  const feld3 = document.createElement("input");
+  feld3.readOnly = true;
+  feld3.placeholder = "Weiterer Charakter…";
+  feld3.onclick = () => oeffnePopup(feld3, "charakter");
 
   // Vorbelegung wenn Parameter übergeben
   if (vorwahlChar) {
-    for (let i = 0; i < select1.options.length; i++) {
-      if (select1.options[i].text.startsWith(vorwahlChar)) {
-        select1.selectedIndex = i;
-        break;
-      }
-    }
+    feld1.value = vorwahlChar + (spieler[vorwahlChar] ? ` (${spieler[vorwahlChar]})` : "");
   }
   if (vorwahlAktion) {
-    select2.value = vorwahlAktion;
+    feldAktion.value = vorwahlAktion;
   }
 
+  // Delete-Button hinzufügen
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "❌";
+  delBtn.onclick = () => div.remove();
+
   // Zusammenbauen
-  div.appendChild(select1);
-  div.appendChild(select2);
-  div.appendChild(select3);
+  div.appendChild(feld1);
+  div.appendChild(feldAktion);
+  div.appendChild(feld2);
   div.appendChild(erstelleErgaenzungsfeld());
-  div.appendChild(select4);
+  div.appendChild(feld3);
   div.appendChild(erstelleErgaenzungsfeld());
+  div.appendChild(delBtn);
 
   document.getElementById("aktionen").appendChild(div);
 }
-
 function rundeSpeichern() {
   const aktionen = Array.from(document.querySelectorAll("#aktionen .aktion")).map(a => {
-    const selects = a.querySelectorAll("select");
     const inputs = a.querySelectorAll("input");
-    const [ch1, act, ch2, ch3] = selects;
-    const erg1 = inputs[0] ? inputs[0].value : "";
-    const erg2 = inputs[1] ? inputs[1].value : "";
+    const [ch1, act, ch2, ch3] = Array.from(inputs).slice(0, 4); // Erste 4 Input-Felder
+    const ergFields = a.querySelectorAll("input[type='text']"); // Ergänzungsfelder
+    const erg1 = ergFields[0] ? ergFields[0].value : "";
+    const erg2 = ergFields[1] ? ergFields[1].value : "";
     return `${ch1.value} ${act.value} ${ch2.value} ${erg1} ${ch3.value} ${erg2}`;
   });
   const notizen = document.getElementById("notizen").value;
@@ -353,93 +538,6 @@ function aktualisiereHistorie() {
   });
 }
 
-function neueAktion(vorwahlChar = null, vorwahlAktion = null) {
-  const div = document.createElement("div");
-  div.className = "aktion";
-
-  // Erstes Select (Charakter 1)
-  const select1 = document.createElement("select");
-  const optLeer1 = document.createElement("option");
-  optLeer1.textContent = "leer";
-  select1.appendChild(optLeer1);
-  ausgewaehlteCharaktere.forEach(c => {
-    const sp = spieler[c] ? ` (${spieler[c]})` : "";
-    const opt = document.createElement("option");
-    opt.textContent = c + sp;
-    select1.appendChild(opt);
-  });
-
-  // Zweites Select (Aktion)
-  const select2 = document.createElement("select");
-  ["nominiert","tötet","vergiftet","bekommt Info über","beschützt","erschießt",
-   "wird zu","wird Butler von","erscheint als","stirbt"].forEach(a => {
-    const opt = document.createElement("option");
-    opt.textContent = a;
-    select2.appendChild(opt);
-  });
-
-  // Automatische Vorauswahl für Waschweib
-  select1.addEventListener("change", () => {
-    if (select1.value.startsWith("Waschweib")) {
-      select2.value = "bekommt Info über";
-    }
-  });
-
-  // Drittes Select (Charakter 2)
-  const select3 = document.createElement("select");
-  const optLeer3 = document.createElement("option");
-  optLeer3.textContent = "leer";
-  select3.appendChild(optLeer3);
-  ausgewaehlteCharaktere.forEach(c => {
-    const sp = spieler[c] ? ` (${spieler[c]})` : "";
-    const opt = document.createElement("option");
-    opt.textContent = c + sp;
-    select3.appendChild(opt);
-  });
-
-  // Viertes Select (weiterer Charakter)
-  const select4 = document.createElement("select");
-  const optLeer4 = document.createElement("option");
-  optLeer4.textContent = "leer";
-  select4.appendChild(optLeer4);
-  ausgewaehlteCharaktere.forEach(c => {
-    const sp = spieler[c] ? ` (${spieler[c]})` : "";
-    const opt = document.createElement("option");
-    opt.textContent = c + sp;
-    select4.appendChild(opt);
-  });
-
-  // Vorbelegung
-  if (vorwahlChar) {
-    for (let i = 0; i < select1.options.length; i++) {
-      if (select1.options[i].text.startsWith(vorwahlChar)) {
-        select1.selectedIndex = i;
-        break;
-      }
-    }
-  }
-  if (vorwahlAktion) {
-    select2.value = vorwahlAktion;
-  }
-
-  // Button zum Löschen dieser Aktion
-  const delBtn = document.createElement("button");
-  delBtn.type = "button";
-  delBtn.textContent = "❌";
-  delBtn.style.marginLeft = "8px";
-  delBtn.onclick = () => div.remove();
-
-  // Zusammenbauen
-  div.appendChild(select1);
-  div.appendChild(select2);
-  div.appendChild(select3);
-  div.appendChild(erstelleErgaenzungsfeld());
-  div.appendChild(select4);
-  div.appendChild(erstelleErgaenzungsfeld());
-  div.appendChild(delBtn);
-
-  document.getElementById("aktionen").appendChild(div);
-}
 
 function rundeRueckgaengig() {
   if (historie.length > 0 && confirm("Letzte Runde wirklich löschen?")) {

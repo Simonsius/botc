@@ -329,6 +329,8 @@ function erstelleErgaenzungsfeld() {
 }
 
 // Charakter-Auswahl
+
+
 function ladeCharaktere() {
   const liste = document.getElementById("charaktere-liste");
   liste.innerHTML = "";
@@ -336,15 +338,20 @@ function ladeCharaktere() {
     const wrapper = document.createElement("div");
     wrapper.style.display = "flex";
     wrapper.style.alignItems = "center";
+    wrapper.style.minHeight = "30px";
 
     const cb = document.createElement("input");
     cb.type = "checkbox";
     cb.value = ch;
     cb.checked = ausgewaehlteCharaktere.includes(ch);
+    cb.style.minWidth = "20px";
+    cb.style.height = "20px";
 
     const lbl = document.createElement("label");
     lbl.textContent = ch;
-    lbl.style.marginLeft = "6px";
+    lbl.style.marginLeft = "8px";
+    lbl.style.flex = "1";
+    lbl.style.textOverflow = "ellipsis";
 
     wrapper.appendChild(cb);
     wrapper.appendChild(lbl);

@@ -193,6 +193,39 @@ h2.expanded::after {
     }
   }
   
+  
+   /* Aktionen */
+  .aktion {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(50,50,50,0.7);
+    border: 1px solid #555;
+  }
+  .aktion h4 {
+    margin-top: 0;
+    color: #f55;
+    font-size: 1em;
+    margin-bottom: 8px;
+  }
+  .aktion input {
+    margin-bottom: 6px;
+  }
+  .del-btn {
+    background: #444;
+    color: #ccc;
+    border: none;
+    font-size: 14px;
+    padding: 4px 8px;
+    margin-top: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .del-btn:hover {
+    background: #666;
+    color: #fff;
+  }
+  
   /* Popup */
 #popup {
   position: fixed;
@@ -514,11 +547,14 @@ function toggleBereich(id) {
 }
 
 
-function neueAktion(vorwahlChar = null, vorwahlAktion = null) {
+function neueAktion(vorwahlChar=null, vorwahlAktion=null) {
   const div = document.createElement("div");
   div.className = "aktion";
+  const nummer = document.querySelectorAll("#aktionen .aktion").length + 1;
+  const titel = document.createElement("h4");
+  titel.textContent = "Aktion " + nummer;
+  div.appendChild(titel);
 
-  // Ersetzen Sie die Select-Elemente durch Input-Felder mit Popup-Funktionalität
   const feld1 = document.createElement("input");
   feld1.readOnly = true;
   feld1.placeholder = "Charakter wählen…";
@@ -527,45 +563,33 @@ function neueAktion(vorwahlChar = null, vorwahlAktion = null) {
   const feldAktion = document.createElement("input");
   feldAktion.readOnly = true;
   feldAktion.placeholder = "Aktion wählen…";
-  feldAktion.onclick = () => {
-    const charName = feld1.value.split(" (")[0];
-    oeffnePopup(feldAktion, "aktion", charName);
-  };
+  feldAktion.onclick = () => oeffnePopup(feldAktion, "aktion");
 
   const feld2 = document.createElement("input");
   feld2.readOnly = true;
   feld2.placeholder = "Ziel wählen…";
   feld2.onclick = () => oeffnePopup(feld2, "charakter");
 
-  const feld3 = document.createElement("input");
-  feld3.readOnly = true;
-  feld3.placeholder = "Weiterer Charakter…";
-  feld3.onclick = () => oeffnePopup(feld3, "charakter");
+  if (vorwahlChar) feld1.value = vorwahlChar;
+  if (vorwahlAktion) feldAktion.value = vorwahlAktion;
 
-  // Vorbelegung wenn Parameter übergeben
-  if (vorwahlChar) {
-    feld1.value = vorwahlChar + (spieler[vorwahlChar] ? ` (${spieler[vorwahlChar]})` : "");
-  }
-  if (vorwahlAktion) {
-    feldAktion.value = vorwahlAktion;
-  }
-
-  // Delete-Button hinzufügen
   const delBtn = document.createElement("button");
-  delBtn.textContent = "❌";
-  delBtn.onclick = () => div.remove();
+  delBtn.textContent = "Löschen";
+  delBtn.className = "del-btn";
+  delBtn.onclick = () => { div.remove(); neuNummerieren(); };
 
-  // Zusammenbauen
   div.appendChild(feld1);
   div.appendChild(feldAktion);
   div.appendChild(feld2);
-  div.appendChild(erstelleErgaenzungsfeld());
-  div.appendChild(feld3);
-  div.appendChild(erstelleErgaenzungsfeld());
   div.appendChild(delBtn);
-
   document.getElementById("aktionen").appendChild(div);
 }
+function neuNummerieren() {
+  document.querySelectorAll("#aktionen .aktion h4").forEach((h,i) => {
+    h.textContent = "Aktion " + (i+1);
+  });
+}
+
 function rundeSpeichern() {
   const aktionen = Array.from(document.querySelectorAll("#aktionen .aktion")).map(a => {
     const inputs = a.querySelectorAll("input");

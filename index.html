@@ -84,6 +84,33 @@
     box-shadow: inset 0 0 10px rgba(200,0,0,0.2);
   }
 
+	/* --- neue Styles für Charakterbuttons --- */
+.charakter-button {
+  display: inline-block;
+  padding: 8px 12px;
+  margin: 5px;
+  border-radius: 8px;
+  border: 2px solid #a11;
+  background: linear-gradient(180deg, #333, #111);
+  color: #f0e6d2;
+  cursor: pointer;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
+  transition: all 0.2s ease-in-out;
+  text-align: center;
+  width: 100%;
+}
+.charakter-button:hover {
+  transform: scale(1.05);
+}
+.charakter-button.ausgewaehlt {
+  background: linear-gradient(180deg, #1b5e20, #2e7d32); /* grün */
+  border-color: #2e7d32;
+  color: #fff;
+}
+
+
   /* Charakterauswahl kompakter */
   #charaktere-liste {
     display: grid;
@@ -335,35 +362,39 @@ function ladeCharaktere() {
   const liste = document.getElementById("charaktere-liste");
   liste.innerHTML = "";
   alleCharaktere.forEach(ch => {
-    const wrapper = document.createElement("div");
-    wrapper.style.display = "flex";
-    wrapper.style.alignItems = "center";
-    wrapper.style.minHeight = "30px";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.textContent = ch;
+    btn.className = "charakter-button";
+    
+    // Bereits gespeicherte Auswahl grün markieren
+    if (ausgewaehlteCharaktere.includes(ch)) {
+      btn.classList.add("ausgewaehlt");
+    }
 
-    const cb = document.createElement("input");
-    cb.type = "checkbox";
-    cb.value = ch;
-    cb.checked = ausgewaehlteCharaktere.includes(ch);
-    cb.style.minWidth = "20px";
-    cb.style.height = "20px";
+    btn.onclick = () => {
+      if (ausgewaehlteCharaktere.includes(ch)) {
+        // abwählen
+        ausgewaehlteCharaktere = ausgewaehlteCharaktere.filter(c => c !== ch);
+        btn.classList.remove("ausgewaehlt");
+      } else {
+        // auswählen
+        ausgewaehlteCharaktere.push(ch);
+        btn.classList.add("ausgewaehlt");
+      }
+    };
 
-    const lbl = document.createElement("label");
-    lbl.textContent = ch;
-    lbl.style.marginLeft = "8px";
-    lbl.style.flex = "1";
-    lbl.style.textOverflow = "ellipsis";
-
-    wrapper.appendChild(cb);
-    wrapper.appendChild(lbl);
-    liste.appendChild(wrapper);
+    liste.appendChild(btn);
   });
 }
 
+
+
 function speichereCharaktere() {
-  ausgewaehlteCharaktere = Array.from(document.querySelectorAll("#charaktere-liste input:checked")).map(cb => cb.value);
   localStorage.setItem("charaktere", JSON.stringify(ausgewaehlteCharaktere));
   zeigeSpielerZuweisung();
 }
+
 function zeigeSpielerZuweisung() {
   document.getElementById("spieler-zuweisung").style.display = "block";
   const container = document.getElementById("zuweisungen");

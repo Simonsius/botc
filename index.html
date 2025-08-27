@@ -30,6 +30,17 @@
   h2 { font-size: 1.4em; margin: 10px 0; }
   h3 { font-size: 1.2em; }
 
+h2 {
+  cursor: pointer;
+}
+h2.collapsed::after {
+  content: " ►";
+}
+h2.expanded::after {
+  content: " ▼";
+}
+
+
   button {
     font-family: 'Cinzel', serif;
     font-size: 16px;
@@ -251,6 +262,8 @@
   to { background-color: transparent; }
 }
 
+
+
 /* Charakter-Icons */
 .charakter-box::before {
   content: "👤 ";
@@ -269,17 +282,24 @@
 
 <h1>Trouble Brewing Dokumentation</h1>
 
+<!-- Charakter-Auswahl -->
 <div id="charakter-auswahl" class="runde-box">
-  <h2>Charaktere auswählen</h2>
-  <div id="charaktere-liste"></div>
-  <button onclick="speichereCharaktere()">Auswahl speichern</button>
+  <h2 onclick="toggleBereich('charaktere-inhalt')">Charaktere auswählen</h2>
+  <div id="charaktere-inhalt">
+    <div id="charaktere-liste"></div>
+    <button onclick="speichereCharaktere()">Auswahl speichern</button>
+  </div>
 </div>
 
+<!-- Spieler-Zuweisung -->
 <div id="spieler-zuweisung" class="runde-box" style="display:none;">
-  <h2>Spielernamen zuweisen</h2>
-  <div id="zuweisungen"></div>
-  <button onclick="speichereSpieler()">Spielernamen speichern</button>
+  <h2 onclick="toggleBereich('spieler-inhalt')">Spielernamen zuweisen</h2>
+  <div id="spieler-inhalt">
+    <div id="zuweisungen"></div>
+    <button onclick="speichereSpieler()">Spielernamen speichern</button>
+  </div>
 </div>
+
 
 <div id="runde-bereich" style="display:none;">
   <div class="runde-box">
@@ -478,6 +498,21 @@ function schliessePopup() {
   aktuellesZielFeld=null;
   popupModus=null;
 }
+
+function toggleBereich(id) {
+  const bereich = document.getElementById(id);
+  const header = bereich.previousElementSibling;
+  if (bereich.style.display === "none") {
+    bereich.style.display = "block";
+    header.classList.remove("collapsed");
+    header.classList.add("expanded");
+  } else {
+    bereich.style.display = "none";
+    header.classList.remove("expanded");
+    header.classList.add("collapsed");
+  }
+}
+
 
 function neueAktion(vorwahlChar = null, vorwahlAktion = null) {
   const div = document.createElement("div");

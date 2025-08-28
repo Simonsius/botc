@@ -86,6 +86,57 @@
     .charakter-button.ausgewaehlt { background:linear-gradient(180deg,#1b5e20,#2e7d32); border-color:#2e7d32; color:#fff; }
     .charakter-button.grau { background:#555; border-color:#888; cursor:not-allowed; }
 
+    /* Toggle-Buttons für Falsche Fährte und Trunkenbold */
+    .toggle-button {
+      padding: 6px 12px;
+      margin-left: 6px;
+      border: 2px solid #555;
+      border-radius: 6px;
+      background: linear-gradient(180deg, #444, #333);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      color: #f0e6d2;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+    }
+
+    .toggle-button:hover {
+      background: linear-gradient(180deg, #555, #444);
+      transform: translateY(-2px);
+    }
+
+    .toggle-button.active {
+      border-color: #007bff;
+      box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+      transform: translateY(0);
+    }
+
+    /* Spezifische Styles für Falsche Fährte */
+    .toggle-button.ff-button {
+      color: #4da6ff;
+      border-color: #0066cc;
+    }
+
+    .toggle-button.ff-button.active {
+      background: linear-gradient(180deg, #004080, #00264d);
+      border-color: #00ccff;
+      box-shadow: 0 0 12px rgba(0, 204, 255, 0.6);
+      color: #ffffff;
+    }
+
+    /* Spezifische Styles für Trunkenbold */
+    .toggle-button.tb-button {
+      color: #ffcc00;
+      border-color: #cc9900;
+    }
+
+    .toggle-button.tb-button.active {
+      background: linear-gradient(180deg, #665200, #332900);
+      border-color: #ffdd00;
+      box-shadow: 0 0 12px rgba(255, 221, 0, 0.6);
+      color: #ffffff;
+    }
+
     #charaktere-liste { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:6px 12px; }
 
     /* Aktion / Eingabefelder */
@@ -103,14 +154,19 @@
     @keyframes highlight { from { background-color: rgba(0,255,0,0.2); } to { background-color: transparent; } }
 
     /* Hervorhebungen */
-    .falsche-faehrte { color: #0000FF !important; font-weight:600; }  /* Gelb für "Falsche Fährte" */
-    .trunkenbold { color: #FFD700 !important; font-weight:600; }     /* Gelb für Trunkenbold (wie gewünscht) */
+    .falsche-faehrte { color: #0000FF !important; font-weight:600; }
+    .trunkenbold { color: #FFD700 !important; font-weight:600; }
 
     .checkbox-container { display:flex; align-items:center; gap:8px; margin:5px 0; }
 
     @media (max-width:600px) {
       #popup .grid { grid-template-columns:repeat(2,1fr); }
       .aktion { flex-direction:column; }
+      .toggle-button { 
+        margin-left: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -173,6 +229,7 @@ const alleCharaktere = [
 ];
 
 const aktionenListe = ["nominiert","stirbt","erscheint als","erschießt","wird zu","vergiftet","bekommt Info über","beschützt","wird Butler von"];
+const impauswahl = ["Dämon dabei","Dämon nicht dabei"];
 
 let ausgewaehlteCharaktere = JSON.parse(localStorage.getItem("charaktere")) || [];
 let spieler = JSON.parse(localStorage.getItem("spieler")) || {};
@@ -258,55 +315,76 @@ function zeigeSpielerZuweisung() {
     input.style.flex = "1 1 auto";
     row.appendChild(input);
 
-    // Checkbox für Falsche Fährte: erscheint, wenn Wahrsagerin in Auswahl enthalten ist
+    // Button für Falsche Fährte: erscheint, wenn Wahrsagerin in Auswahl enthalten ist
     if (ausgewaehlteCharaktere.includes("Wahrsagerin")) {
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.id = "ff-" + ch;
-      cb.checked = (falscheFaehrte === ch);
-      cb.onchange = () => {
-        if (cb.checked) {
-          falscheFaehrte = ch;
-          // andere ff-checkboxen aus
-          document.querySelectorAll('#zuweisungen input[id^="ff-"]').forEach(other => { if (other !== cb) other.checked = false; });
-        } else {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.id = "ff-" + ch;
+      button.className = "toggle-button ff-button";
+      button.textContent = "Falsche Fährte";
+      
+      if (falscheFaehrte === ch) {
+        button.classList.add("active");
+      }
+      
+      button.onclick = () => {
+        if (falscheFaehrte === ch) {
+          // Button war bereits aktiv -> deaktivieren
           falscheFaehrte = null;
+          button.classList.remove("active");
+        } else {
+          // Button aktivieren
+          falscheFaehrte = ch;
+          button.classList.add("active");
+          
+          // Andere Falsche-Fährte-Buttons zurücksetzen
+          document.querySelectorAll('#zuweisungen button.ff-button').forEach(other => {
+            if (other !== button) {
+              other.classList.remove("active");
+            }
+          });
         }
         localStorage.setItem("falscheFaehrte", JSON.stringify(falscheFaehrte));
         aktualisiereHistorie();
       };
-      const ffLabel = document.createElement("label");
-      ffLabel.htmlFor = cb.id;
-      ffLabel.textContent = "Falsche Fährte";
-      ffLabel.style.color = "#0000FF";
-      ffLabel.style.marginLeft = "6px";
-      row.appendChild(cb);
-      row.appendChild(ffLabel);
+      
+      row.appendChild(button);
     }
 
-    // Checkbox für Trunkenbold: erscheint, wenn Trunkenbold in Auswahl enthalten ist
+    // Button für Trunkenbold: erscheint, wenn Trunkenbold in Auswahl enthalten ist
     if (ausgewaehlteCharaktere.includes("Trunkenbold")) {
-      const cb = document.createElement("input");
-      cb.type = "checkbox";
-      cb.id = "tb-" + ch;
-      cb.checked = (trunkenbold === ch);
-      cb.onchange = () => {
-        if (cb.checked) {
-          trunkenbold = ch;
-          document.querySelectorAll('#zuweisungen input[id^="tb-"]').forEach(other => { if (other !== cb) other.checked = false; });
-        } else {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.id = "tb-" + ch;
+      button.className = "toggle-button tb-button";
+      button.textContent = "Trunkenbold";
+      
+      if (trunkenbold === ch) {
+        button.classList.add("active");
+      }
+      
+      button.onclick = () => {
+        if (trunkenbold === ch) {
+          // Button war bereits aktiv -> deaktivieren
           trunkenbold = null;
+          button.classList.remove("active");
+        } else {
+          // Button aktivieren
+          trunkenbold = ch;
+          button.classList.add("active");
+          
+          // Andere Trunkenbold-Buttons zurücksetzen
+          document.querySelectorAll('#zuweisungen button.tb-button').forEach(other => {
+            if (other !== button) {
+              other.classList.remove("active");
+            }
+          });
         }
         localStorage.setItem("trunkenbold", JSON.stringify(trunkenbold));
         aktualisiereHistorie();
       };
-      const tbLabel = document.createElement("label");
-      tbLabel.htmlFor = cb.id;
-      tbLabel.textContent = "Trunkenbold";
-      tbLabel.style.color = "#FFD700"; /* Gelb — wie von Ihnen zuletzt gewünscht */
-      tbLabel.style.marginLeft = "6px";
-      row.appendChild(cb);
-      row.appendChild(tbLabel);
+      
+      row.appendChild(button);
     }
 
     container.appendChild(row);
@@ -342,7 +420,7 @@ function speichereSpieler() {
       neueStandardAktion("Waschweib", "Waschweib bekommt", "Charakter auswählen", "als Townsfolk und", "Charakter auswählen", "als Falschinformation");
     }
     if (ausgewaehlteCharaktere.includes("Bibliothekar")) {
-      neueStandardAktion("Bibliothekar", "Bibliothekar bekommt", "Charakter auswählen", "als Außenseiter und", "Charakter auswählen", "als Falschinformation");
+      neueStandardAktion("Bibliothekar", "Bibliothekar bekommt", "Charakter auswählen", "Als Außenseiter und", "Charakter auswählen", "als Falschinformation");
     }
     if (ausgewaehlteCharaktere.includes("Detektiv")) {
       neueStandardAktion("Detektiv", "Detektiv bekommt", "Charakter auswählen", "als Scherge und", "Charakter auswählen", "als Falschinformation");
@@ -354,8 +432,8 @@ function speichereSpieler() {
       neueStandardAktion("Empath", "Empath bekommt die Information, dass", "Zahl zwischen 0 und 2", "böse Charaktere neben ihm sitzen");
     }
     if (ausgewaehlteCharaktere.includes("Wahrsagerin")) {
-      neueStandardAktion("Wahrsagerin", "Wahrsagerin bekommt die Info, dass von", "Charakter auswählen", "und", "Charakter auswählen", "der Dämon dabei ist/der Dämon nicht dabei ist");
-    }
+    neueStandardAktion("Wahrsagerin", "Wahrsagerin bekommt die Info, dass von","Charakter auswählen","und","Charakter auswählen","der", "Imp-Auswahl", "ist");
+	}
     if (ausgewaehlteCharaktere.includes("Butler")) {
       neueStandardAktion("Butler", "Butler hat", "Charakter auswählen", "als Meister gewählt");
     }
@@ -404,7 +482,11 @@ function oeffnePopup(zielFeld, modus, charName = null, aktionDiv = null) {
     title.textContent = "Zahl wählen";
     const max = (zielFeld && zielFeld.placeholder && zielFeld.placeholder.includes("0 und 2")) ? 2 : 4;
     for (let i = 0; i <= max; i++) items.push(i.toString());
+  } else if (modus === "impda") {
+    items = impauswahl;
+    title.textContent = "Aktion wählen";
   }
+  
 
   items.forEach(item => {
     const btn = document.createElement("button");
@@ -509,7 +591,14 @@ function neueStandardAktion(charakter, ...teile) {
       fld.onclick = () => oeffnePopup(fld, "zahl", null, div);
       div.appendChild(fld);
       felder.push(fld);
-    } else {
+    } else if (t === "Imp-Auswahl") {
+    const fld = document.createElement("input");
+    fld.readOnly = true;
+    fld.placeholder = "Dämon dabei / nicht dabei";
+    fld.onclick = () => oeffnePopup(fld, "impda", null, div);
+    div.appendChild(fld);
+    felder.push(fld);
+	} else {
       const span = document.createElement("span");
       span.textContent = t;
       span.style.margin = "0 6px";
@@ -568,14 +657,15 @@ function rundeSpeichern() {
   aktualisiereHistorie();
 
   // Standardaktionen ab Runde 2 (Trunkenbold bleibt ausgeschlossen)
-  const text = `${zeigeCharakter("Waschweib")} erfährt ${zeigeCharakter("SpielerA")} und ${zeigeCharakter("SpielerB")}`;
+  
   if (runde >= 2) {
+ 
     if (ausgewaehlteCharaktere.includes("Giftmischer")) neueStandardAktion("Giftmischer","Giftmischer hat","Charakter auswählen","vergiftet");
     if (ausgewaehlteCharaktere.includes("Mönch")) neueStandardAktion("Mönch","Mönch schützt","Charakter auswählen");
     if (ausgewaehlteCharaktere.includes("Imp")) neueStandardAktion("Imp","Imp tötet","Charakter auswählen");
     if (ausgewaehlteCharaktere.includes("Rabenhüter")) neueStandardAktion("Rabenhüter","Rabenhüter ist gestorben und hat die Identität von","Charakter auswählen","erfahren");
     if (ausgewaehlteCharaktere.includes("Empath")) neueStandardAktion("Empath","Empath bekommt die Information, dass","Zahl zwischen 0 und 2","böse Charaktere neben ihm sitzen");
-    if (ausgewaehlteCharaktere.includes("Wahrsagerin")) neueStandardAktion("Wahrsagerin","Wahrsagerin bekommt die Info, dass von","Charakter auswählen","und","Charakter auswählen","der Dämon dabei ist/der Dämon nicht dabei ist");
+    if (ausgewaehlteCharaktere.includes("Wahrsagerin")) neueStandardAktion("Wahrsagerin","Wahrsagerin bekommt die Info, dass von","Charakter auswählen","and","Charakter auswählen","der Dämon dabei ist/der Dämon nicht dabei ist");
     if (ausgewaehlteCharaktere.includes("Totengräber")) neueStandardAktion("Totengräber","Totengräber bekommt die Information, dass","Charakter auswählen","durch Hinrichtung gestorben ist");
     if (ausgewaehlteCharaktere.includes("Butler")) neueStandardAktion("Butler","Butler hat","Charakter auswählen","als Meister gewählt");
   }

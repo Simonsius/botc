@@ -1,391 +1,200 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Trouble Brewing Ablauf</title>
 
-  <!-- Mystische Schriftarten -->
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Uncial+Antiqua&display=swap" rel="stylesheet">
 
   <style>
-  body {
-    font-family: 'Cinzel', serif;
-    margin: 0;
-    padding: 15px;
-    background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-    color: #f0e6d2;
-    font-size: 16px;
-    background-attachment: fixed;
-    background-size: cover;
-  }
-
-  h1, h2, h3 {
-    font-family: 'Uncial Antiqua', cursive;
-    text-align: center;
-    color: #d32f2f;
-    text-shadow: 0 0 6px rgba(0,0,0,0.8);
-  }
-  h1 { font-size: 2em; margin-bottom: 20px; }
-  h2 { font-size: 1.4em; margin: 10px 0; }
-  h3 { font-size: 1.2em; }
-  
-  h2 {
-  cursor: pointer;
-}
-h2.collapsed::after {
-  content: " ►";
-}
-h2.expanded::after {
-  content: " ▼";
-}
-
-  button {
-    font-family: 'Cinzel', serif;
-    font-size: 16px;
-    padding: 10px 16px;
-    margin: 6px;
-    border-radius: 10px;
-    border: 2px solid #a11;
-    background: linear-gradient(180deg, #b71c1c, #7f0000);
-    color: #f8f8f8;
-    cursor: pointer;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-    transition: transform 0.15s, background 0.3s;
-    min-height: 44px;
-  }
-  button:hover {
-    background: linear-gradient(180deg, #d32f2f, #8b0000);
-    transform: scale(1.05);
-  }
-
-  select, input, textarea {
-    font-family: 'Cinzel', serif;
-    font-size: 16px;
-    margin: 6px 0;
-    padding: 10px;
-    width: 100%;
-    border-radius: 8px;
-    border: 1px solid #555;
-    background: #222;
-    color: #f0e6d2;
-    box-sizing: border-box;
-    min-height: 44px;
-  }
-  textarea {
-    resize: vertical;
-  }
-
-  .runde-box, .notiz-box {
-    margin: 15px 0;
-    padding: 15px;
-    background: rgba(30, 30, 30, 0.95);
-    border-radius: 15px;
-    border: 1px solid #444;
-    box-shadow: 0 0 10px rgba(255,0,0,0.3);
-  }
-
-  .historie {
-    margin-top: 25px;
-    padding: 15px;
-    background: rgba(20,20,20,0.9);
-    border-radius: 15px;
-    border: 1px solid #555;
-    box-shadow: inset 0 0 10px rgba(200,0,0,0.2);
-  }
-
-	/* --- neue Styles für Charakterbuttons --- */
-.charakter-button {
-  display: inline-block;
-  padding: 8px 12px;
-  margin: 5px;
-  border-radius: 8px;
-  border: 2px solid #a11;
-  background: linear-gradient(180deg, #333, #111);
-  color: #f0e6d2;
-  cursor: pointer;
-  font-family: 'Cinzel', serif;
-  font-size: 14px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-  transition: all 0.2s ease-in-out;
-  text-align: center;
-  width: 100%;
-}
-.charakter-button:hover {
-  transform: scale(1.05);
-}
-.charakter-button.ausgewaehlt {
-  background: linear-gradient(180deg, #1b5e20, #2e7d32); /* grün */
-  border-color: #2e7d32;
-  color: #fff;
-}
-
-
-  /* Charakterauswahl kompakter */
-  #charaktere-liste {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 6px 12px;
-  }
-  #charaktere-liste div {
-    display: flex;
-    align-items: center;
-  }
-  #charaktere-liste label {
-    margin-left: 6px;
-  }
-
-  /* Aktionen kompakter */
-  .aktion { 
-    margin-bottom: 10px; 
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-  .aktion select,
-  .aktion input {
-    flex: 1 1 45%;
-    min-width: 120px;
-    font-size: 14px;
-    padding: 6px 8px;
-    min-height: 32px;
-  }
-  .aktion button {
-    flex: 0 0 auto;
-    font-size: 14px;
-    padding: 6px 10px;
-    min-height: 32px;
-    border-radius: 6px;
-  }
-
-  /* Mobile Optimierungen */
-  @media (max-width: 600px) {
+    /* Grundlayout */
     body {
-      font-size: 15px;
-      padding: 8px;
+      font-family: 'Cinzel', serif;
+      margin: 0;
+      padding: 15px;
+      background: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
+      color: #f0e6d2;
+      font-size: 16px;
     }
-    h1 { font-size: 1.6em; }
+    h1,h2,h3 { font-family: 'Uncial Antiqua', cursive; text-align:center; color:#d32f2f; text-shadow:0 0 6px rgba(0,0,0,0.8); }
+    h1{ font-size:2em; margin-bottom:20px }
+    h2{ font-size:1.4em; margin:10px 0; cursor:pointer; }
+    h3{ font-size:1.1em; }
+
     button {
-      font-size: 15px;
-      padding: 8px 12px;
-      min-height: 38px;
+      font-family:'Cinzel', serif;
+      font-size:16px;
+      padding:10px 16px;
+      margin:6px;
+      border-radius:10px;
+      border:2px solid #a11;
+      background:linear-gradient(180deg,#b71c1c,#7f0000);
+      color:#f8f8f8;
+      cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,0.6);
+      transition: transform 0.15s, background 0.3s;
+      min-height:44px;
     }
-    .runde-box, .historie {
-      padding: 10px;
+    button:hover { transform:scale(1.05); background:linear-gradient(180deg,#d32f2f,#8b0000); }
+
+    input, select, textarea {
+      font-family:'Cinzel', serif;
+      font-size:16px;
+      margin:6px 0;
+      padding:10px;
+      width:100%;
+      border-radius:8px;
+      border:1px solid #555;
+      background:#222;
+      color:#f0e6d2;
+      box-sizing:border-box;
+      min-height:44px;
     }
-    .aktion {
-      flex-direction: column;
-      gap: 4px;
+    textarea { resize:vertical; }
+
+    .runde-box, .notiz-box {
+      margin:15px 0;
+      padding:15px;
+      background:rgba(30,30,30,0.95);
+      border-radius:15px;
+      border:1px solid #444;
     }
-    .aktion select,
-    .aktion input {
-      width: 100%;
-      flex: unset;
-      font-size: 13px;
-      padding: 5px 6px;
-      min-height: 30px;
+    .historie {
+      margin-top:25px;
+      padding:15px;
+      background:rgba(20,20,20,0.9);
+      border-radius:15px;
+      border:1px solid #555;
     }
-    .aktion button {
-      font-size: 13px;
-      padding: 5px 8px;
-      min-height: 30px;
+
+    /* Charakter-Buttons */
+    .charakter-button {
+      display:inline-block;
+      padding:8px 12px;
+      margin:5px;
+      border-radius:8px;
+      border:2px solid #a11;
+      background:linear-gradient(180deg,#333,#111);
+      color:#f0e6d2;
+      cursor:pointer;
+      font-size:14px;
+      width:100%;
+      box-shadow:0 2px 6px rgba(0,0,0,0.6);
+      transition:all .2s ease-in-out;
     }
-  }
-  
-     /* Aktionen */
-  .aktion {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 10px;
-    background: rgba(50,50,50,0.7);
-    border: 1px solid #555;
-  }
-  .aktion h4 {
-    margin-top: 0;
-    color: #f55;
-    font-size: 1em;
-    margin-bottom: 8px;
-  }
-  .aktion input {
-    margin-bottom: 6px;
-  }
-  .del-btn {
-    background: #444;
-    color: #ccc;
-    border: none;
-    font-size: 14px;
-    padding: 4px 8px;
-    margin-top: 6px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .del-btn:hover {
-    background: #666;
-    color: #fff;
-  }
-  
-  /* Popup */
-#popup {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 20px;
-  color: #fff;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(6px);
-}
+    .charakter-button.ausgewaehlt { background:linear-gradient(180deg,#1b5e20,#2e7d32); border-color:#2e7d32; color:#fff; }
+    .charakter-button.grau { background:#555; border-color:#888; cursor:not-allowed; }
 
-#popup h2 {
-  margin-bottom: 20px;
-  font-family: 'Cinzel', serif;
-  color: #f55;
-}
+    #charaktere-liste { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:6px 12px; }
 
-#popup .grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 12px;
-  width: 100%;
-  max-width: 800px;
-  max-height: 70vh;
-  overflow-y: auto;
-}
+    /* Aktion / Eingabefelder */
+    .aktion { margin-bottom:15px; padding:10px; border-radius:10px; background:rgba(50,50,50,0.7); border:1px solid #555; display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+    .aktion input { flex:1 1 45%; min-width:120px; font-size:14px; padding:6px 8px; min-height:32px; }
+    .del-btn { background:#444; color:#ccc; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; }
+    .del-btn:hover { background:#666; color:#fff; }
 
-#popup button {
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  padding: 12px;
-  border-radius: 10px;
-  border: 2px solid #a11;
-  background: linear-gradient(180deg, #b71c1c, #7f0000);
-  color: #f8f8f8;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.6);
-  transition: transform 0.15s, background 0.3s;
-}
+    /* Popup */
+    #popup { position:fixed; top:0; left:0; width:100%; height:100%; display:none; align-items:center; justify-content:center; z-index:1000; padding:20px; color:#fff; background:rgba(0,0,0,0.85); backdrop-filter:blur(6px); }
+    #popup .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:12px; width:100%; max-width:800px; max-height:70vh; overflow:auto; }
+    #popup button { padding:12px; border-radius:10px; border:2px solid #a11; background:linear-gradient(180deg,#b71c1c,#7f0000); }
 
-#popup button:hover {
-  background: linear-gradient(180deg, #d32f2f, #8b0000);
-  transform: scale(1.05);
-}
+    .auswahl-bestaetigt { animation: highlight 0.6s ease-out; }
+    @keyframes highlight { from { background-color: rgba(0,255,0,0.2); } to { background-color: transparent; } }
 
-#popup .close-btn {
-  margin-top: 20px;
-  background: #444;
-  border: none;
-  padding: 10px 18px;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-}
+    /* Hervorhebungen */
+    .falsche-faehrte { color: #0000FF !important; font-weight:600; }  /* Gelb für "Falsche Fährte" */
+    .trunkenbold { color: #FFD700 !important; font-weight:600; }     /* Gelb für Trunkenbold (wie gewünscht) */
 
-/* Auswahl-Bestätigung Animation */
-.auswahl-bestaetigt {
-  animation: highlight 0.6s ease-out;
-}
-@keyframes highlight {
-  from { background-color: rgba(0,255,0,0.3); }
-  to { background-color: transparent; }
-}
+    .checkbox-container { display:flex; align-items:center; gap:8px; margin:5px 0; }
 
-/* Charakter-Icons */
-.charakter-box::before {
-  content: "👤 ";
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  #popup .grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-</style>
-
+    @media (max-width:600px) {
+      #popup .grid { grid-template-columns:repeat(2,1fr); }
+      .aktion { flex-direction:column; }
+    }
+  </style>
 </head>
 <body>
 
-<h1>Trouble Brewing Dokumentation</h1>
+  <h1>Trouble Brewing Dokumentation</h1>
 
-<!-- Charakter-Auswahl -->
-<div id="charakter-auswahl" class="runde-box">
-  <h2 onclick="toggleBereich('charaktere-inhalt')">Charaktere auswählen</h2>
-  <div id="charaktere-inhalt">
-    <div id="charaktere-liste"></div>
-    <button onclick="speichereCharaktere()">Auswahl speichern</button>
+  <!-- Charakter-Auswahl -->
+  <div id="charakter-auswahl" class="runde-box">
+    <h2 onclick="toggleBereich('charaktere-inhalt')">Charaktere auswählen</h2>
+    <div id="charaktere-inhalt">
+      <div id="charaktere-liste"></div>
+      <button onclick="speichereCharaktere()">Auswahl speichern</button>
+    </div>
   </div>
-</div>
 
-<!-- Spieler-Zuweisung -->
-<div id="spieler-zuweisung" class="runde-box" style="display:none;">
-  <h2 onclick="toggleBereich('spieler-inhalt')">Spielernamen zuweisen</h2>
-  <div id="spieler-inhalt">
-    <div id="zuweisungen"></div>
-    <button onclick="speichereSpieler()">Spielernamen speichern</button>
+  <!-- Spieler-Zuweisung -->
+  <div id="spieler-zuweisung" class="runde-box" style="display:none;">
+    <h2 onclick="toggleBereich('spieler-inhalt')">Spielernamen zuweisen</h2>
+    <div id="spieler-inhalt">
+      <div id="zuweisungen"></div>
+      <button onclick="speichereSpieler()">Spielernamen speichern</button>
+    </div>
   </div>
-</div>
 
-<div id="runde-bereich" style="display:none;">
-  <div class="runde-box">
-    <h2 id="rundenanzeige">Runde 1</h2>
-    <button onclick="neueAktion()">Aktion hinzufügen</button>
-    <div id="aktionen"></div>
-    <h3>Notizen</h3>
-    <textarea id="notizen" rows="3" placeholder="Notizen zur Runde..."></textarea>
-    <br>
-    <button onclick="rundeSpeichern()">Runde speichern</button>
+  <div id="runde-bereich" style="display:none;">
+    <div class="runde-box">
+      <h2 id="rundenanzeige">Runde 1</h2>
+      <button onclick="neueAktion()">Aktion hinzufügen</button>
+      <div id="aktionen"></div>
+      <h3>Notizen</h3>
+      <textarea id="notizen" rows="3" placeholder="Notizen zur Runde..."></textarea><br>
+      <button onclick="rundeSpeichern()">Runde speichern</button>
+    </div>
   </div>
-</div>
 
-<div id="popup">
-  <h2 id="popup-title"></h2>
-  <div class="grid" id="popup-grid"></div>
-  <button class="close-btn" onclick="schliessePopup()">Abbrechen</button>
-</div>
+  <div id="popup">
+    <div style="width:100%; max-width:900px;">
+      <h2 id="popup-title"></h2>
+      <div class="grid" id="popup-grid"></div>
+      <div style="text-align:center; margin-top:12px;"><button class="close-btn" onclick="schliessePopup()">Abbrechen</button></div>
+    </div>
+  </div>
 
-<div class="historie">
-  <h2>Historie</h2>
-  <div id="historie-liste"></div>
-  <button onclick="rundeRueckgaengig()">Letzte Runde rückgängig</button>
-  <button onclick="historieLoeschen()">Historie löschen</button>
-  <button onclick="charaktereZuruecksetzen()">Charaktere & Spielernamen zurücksetzen</button>
-</div>
+  <div class="historie">
+    <h2>Historie</h2>
+    <div id="historie-liste"></div>
+    <button onclick="rundeRueckgaengig()">Letzte Runde rückgängig</button>
+    <button onclick="historieLoeschen()">Historie löschen</button>
+    <button onclick="charaktereZuruecksetzen()">Charaktere & Spielernamen zurücksetzen</button>
+  </div>
 
 <script>
+/* ---------- Daten / Konfiguration ---------- */
 const alleCharaktere = [
   "Waschweib","Bibliothekar","Detektiv","Koch","Empath","Wahrsagerin","Soldat",
   "Totengräber","Mönch","Rabenhüter","Jungfrau","Dämonenjäger","Bürgermeister",
   "Butler","Heilige","Einsiedler","Trunkenbold","Baron","Scharlachrote Frau",
-  "Spion", "Giftmischer","Imp", "Falsche Fährte"
+  "Spion","Giftmischer","Imp"
 ];
 
-const aktionenListe = ["nominiert", "tötet", "vergiftet", "bekommt Info über", "beschützt", "erschießt", "wird zu", "wird Butler von", "erscheint als", "stirbt"];
-
-const aktionenProCharakter = {
-  "Waschweib": ["bekommt Info über"],
-  "Bibliothekar": ["bekommt Info über"],
-  "Detektiv": ["bekommt Info über"],
-  "Koch": ["bekommt Info über"],
-  "Empath": ["bekommt Info über"],
-  "Wahrsagerin": ["bekommt Info über"],
-  "Soldat": ["beschützt"],
-  "Mönch": ["beschützt"],
-  "Giftmischer": ["vergiftet"],
-  "Imp": ["tötet"],
-  "Butler": ["wird Butler von"]
-  // Fügen Sie weitere Charaktere hinzu
-};
+const aktionenListe = ["nominiert","stirbt","erscheint als","erschießt","wird zu","vergiftet","bekommt Info über","beschützt","wird Butler von"];
 
 let ausgewaehlteCharaktere = JSON.parse(localStorage.getItem("charaktere")) || [];
 let spieler = JSON.parse(localStorage.getItem("spieler")) || {};
+let falscheFaehrte = JSON.parse(localStorage.getItem("falscheFaehrte")) || null;
+let trunkenbold = JSON.parse(localStorage.getItem("trunkenbold")) || null;
 let historie = JSON.parse(localStorage.getItem("historie")) || [];
 let runde = historie.length + 1;
 
-// --- Zusatzfeld als Button ---
+/* ---------- Hilfsfunktionen ---------- */
+function toggleBereich(id) {
+  const bereich = document.getElementById(id);
+  const header = bereich.previousElementSibling;
+  if (!bereich) return;
+  if (bereich.style.display === "none" || !bereich.style.display) {
+    bereich.style.display = "block";
+    header.classList.remove("collapsed"); header.classList.add("expanded");
+  } else {
+    bereich.style.display = "none";
+    header.classList.remove("expanded"); header.classList.add("collapsed");
+  }
+}
+
 function erstelleErgaenzungsfeld() {
   const container = document.createElement("span");
   const btn = document.createElement("button");
@@ -403,9 +212,7 @@ function erstelleErgaenzungsfeld() {
   return container;
 }
 
-// Charakter-Auswahl
-
-
+/* ---------- Charakter-Auswahl / Laden ---------- */
 function ladeCharaktere() {
   const liste = document.getElementById("charaktere-liste");
   liste.innerHTML = "";
@@ -414,103 +221,206 @@ function ladeCharaktere() {
     btn.type = "button";
     btn.textContent = ch;
     btn.className = "charakter-button";
-    
-    // Bereits gespeicherte Auswahl grün markieren
-    if (ausgewaehlteCharaktere.includes(ch)) {
-      btn.classList.add("ausgewaehlt");
-    }
-
+    if (ausgewaehlteCharaktere.includes(ch)) btn.classList.add("ausgewaehlt");
     btn.onclick = () => {
       if (ausgewaehlteCharaktere.includes(ch)) {
-        // abwählen
         ausgewaehlteCharaktere = ausgewaehlteCharaktere.filter(c => c !== ch);
         btn.classList.remove("ausgewaehlt");
       } else {
-        // auswählen
         ausgewaehlteCharaktere.push(ch);
         btn.classList.add("ausgewaehlt");
       }
     };
-
     liste.appendChild(btn);
   });
 }
 
+/* ---------- Spieler-Zuweisung ---------- */
+function zeigeSpielerZuweisung() {
+  document.getElementById("spieler-zuweisung").style.display = "block";
+  const container = document.getElementById("zuweisungen");
+  container.innerHTML = "";
 
+  ausgewaehlteCharaktere.forEach(ch => {
+    const row = document.createElement("div");
+    row.className = "checkbox-container";
 
+    // Label + Namefeld
+    const label = document.createElement("label");
+    label.textContent = ch + ":";
+    label.style.minWidth = "140px";
+    row.appendChild(label);
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = spieler[ch] || "";
+    input.dataset.char = ch;
+    input.style.flex = "1 1 auto";
+    row.appendChild(input);
+
+    // Checkbox für Falsche Fährte: erscheint, wenn Wahrsagerin in Auswahl enthalten ist
+    if (ausgewaehlteCharaktere.includes("Wahrsagerin")) {
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.id = "ff-" + ch;
+      cb.checked = (falscheFaehrte === ch);
+      cb.onchange = () => {
+        if (cb.checked) {
+          falscheFaehrte = ch;
+          // andere ff-checkboxen aus
+          document.querySelectorAll('#zuweisungen input[id^="ff-"]').forEach(other => { if (other !== cb) other.checked = false; });
+        } else {
+          falscheFaehrte = null;
+        }
+        localStorage.setItem("falscheFaehrte", JSON.stringify(falscheFaehrte));
+        aktualisiereHistorie();
+      };
+      const ffLabel = document.createElement("label");
+      ffLabel.htmlFor = cb.id;
+      ffLabel.textContent = "Falsche Fährte";
+      ffLabel.style.color = "#0000FF";
+      ffLabel.style.marginLeft = "6px";
+      row.appendChild(cb);
+      row.appendChild(ffLabel);
+    }
+
+    // Checkbox für Trunkenbold: erscheint, wenn Trunkenbold in Auswahl enthalten ist
+    if (ausgewaehlteCharaktere.includes("Trunkenbold")) {
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.id = "tb-" + ch;
+      cb.checked = (trunkenbold === ch);
+      cb.onchange = () => {
+        if (cb.checked) {
+          trunkenbold = ch;
+          document.querySelectorAll('#zuweisungen input[id^="tb-"]').forEach(other => { if (other !== cb) other.checked = false; });
+        } else {
+          trunkenbold = null;
+        }
+        localStorage.setItem("trunkenbold", JSON.stringify(trunkenbold));
+        aktualisiereHistorie();
+      };
+      const tbLabel = document.createElement("label");
+      tbLabel.htmlFor = cb.id;
+      tbLabel.textContent = "Trunkenbold";
+      tbLabel.style.color = "#FFD700"; /* Gelb — wie von Ihnen zuletzt gewünscht */
+      tbLabel.style.marginLeft = "6px";
+      row.appendChild(cb);
+      row.appendChild(tbLabel);
+    }
+
+    container.appendChild(row);
+  });
+}
+
+/* ---------- Speichern Spieler & Start Aktionen ---------- */
 function speichereCharaktere() {
   localStorage.setItem("charaktere", JSON.stringify(ausgewaehlteCharaktere));
   zeigeSpielerZuweisung();
 }
 
-function zeigeSpielerZuweisung() {
-  document.getElementById("spieler-zuweisung").style.display = "block";
-  const container = document.getElementById("zuweisungen");
-  container.innerHTML = "";
-  ausgewaehlteCharaktere.forEach(ch => {
-    const label = document.createElement("label");
-    label.textContent = ch + ": ";
-    const input = document.createElement("input");
-    input.type = "text";
-    input.value = spieler[ch] || "";
-    input.dataset.char = ch;
-    container.appendChild(label);
-    container.appendChild(input);
-    container.appendChild(document.createElement("br"));
-  });
-}
 function speichereSpieler() {
-  document.querySelectorAll("#zuweisungen input").forEach(inp => {
+  // Namen speichern
+  document.querySelectorAll("#zuweisungen input[type='text']").forEach(inp => {
     spieler[inp.dataset.char] = inp.value;
   });
   localStorage.setItem("spieler", JSON.stringify(spieler));
+  localStorage.setItem("falscheFaehrte", JSON.stringify(falscheFaehrte));
+  localStorage.setItem("trunkenbold", JSON.stringify(trunkenbold));
+
+  // Show runde
   document.getElementById("runde-bereich").style.display = "block";
   aktualisiereHistorie();
 
-  // --- Standardaktionen für Runde 1 ---
+  // --- Standardaktionen für Runde 1 (Trunkenbold wird NICHT als aktive Aktion erstellt) ---
   if (runde === 1) {
-    if (ausgewaehlteCharaktere.includes("Trunkenbold")) neueAktion("Trunkenbold");
-	if (ausgewaehlteCharaktere.includes("Falsche Fährte")) neueAktion("Falsche Fährte");
-    if (ausgewaehlteCharaktere.includes("Giftmischer")) neueAktion("Giftmischer", "vergiftet");
-    if (ausgewaehlteCharaktere.includes("Waschweib")) neueAktion("Waschweib", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Bibliothekar")) neueAktion("Bibliothekar", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Detektiv")) neueAktion("Detektiv", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Koch")) neueAktion("Koch", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Empath")) neueAktion("Empath", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Wahrsagerin")) neueAktion("Wahrsagerin", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Butler")) neueAktion("Butler", "bekommt Info über");
+    // Nur für bestimmte aktive Rollen: (Trunkenbold bewusst ausgelassen)
+    if (ausgewaehlteCharaktere.includes("Giftmischer")) {
+      neueStandardAktion("Giftmischer", "Giftmischer hat", "Charakter auswählen", "vergiftet");
+    }
+    if (ausgewaehlteCharaktere.includes("Waschweib")) {
+      neueStandardAktion("Waschweib", "Waschweib bekommt", "Charakter auswählen", "als Townsfolk und", "Charakter auswählen", "als Falschinformation");
+    }
+    if (ausgewaehlteCharaktere.includes("Bibliothekar")) {
+      neueStandardAktion("Bibliothekar", "Bibliothekar bekommt", "Charakter auswählen", "als Außenseiter und", "Charakter auswählen", "als Falschinformation");
+    }
+    if (ausgewaehlteCharaktere.includes("Detektiv")) {
+      neueStandardAktion("Detektiv", "Detektiv bekommt", "Charakter auswählen", "als Scherge und", "Charakter auswählen", "als Falschinformation");
+    }
+    if (ausgewaehlteCharaktere.includes("Koch")) {
+      neueStandardAktion("Koch", "Koch bekommt die Information, dass", "Zahl zwischen 0 und 4", "böse Paare in der Runde sind");
+    }
+    if (ausgewaehlteCharaktere.includes("Empath")) {
+      neueStandardAktion("Empath", "Empath bekommt die Information, dass", "Zahl zwischen 0 und 2", "böse Charaktere neben ihm sitzen");
+    }
+    if (ausgewaehlteCharaktere.includes("Wahrsagerin")) {
+      neueStandardAktion("Wahrsagerin", "Wahrsagerin bekommt die Info, dass von", "Charakter auswählen", "und", "Charakter auswählen", "der Dämon dabei ist/der Dämon nicht dabei ist");
+    }
+    if (ausgewaehlteCharaktere.includes("Butler")) {
+      neueStandardAktion("Butler", "Butler hat", "Charakter auswählen", "als Meister gewählt");
+    }
   }
 }
 
-// Popup
+/* ---------- Popup für Auswahl (Charakter / Aktion / Zahl) ---------- */
 let aktuellesZielFeld = null;
 let popupModus = null;
+let aktuelleAktionDiv = null;
 
-function oeffnePopup(zielFeld, modus, charName = null) {
+function oeffnePopup(zielFeld, modus, charName = null, aktionDiv = null) {
   aktuellesZielFeld = zielFeld;
   popupModus = modus;
+  aktuelleAktionDiv = aktionDiv;
 
   const title = document.getElementById("popup-title");
   const grid = document.getElementById("popup-grid");
   grid.innerHTML = "";
 
   let items = [];
-  
+
   if (modus === "charakter") {
-    items = ausgewaehlteCharaktere;
+    // Trunkenbold ist passiv — nicht in Aktionsauswahl anzeigen
+    items = ausgewaehlteCharaktere.filter(c => c !== "Trunkenbold");
+
     title.textContent = "Charakter wählen";
-  } 
-  else if (modus === "aktion") {
-    // IMMER alle Aktionen anzeigen, unabhängig vom Charakter
+
+    // Verhindere Mehrfachauswahl innerhalb derselben Aktion (außer Imp)
+    if (aktuelleAktionDiv) {
+      const bereitsAusgewaehlt = [];
+      aktuelleAktionDiv.querySelectorAll("input[type='text']").forEach(input => {
+        if (input !== zielFeld && input.value) {
+          const char = input.value.split(" (")[0];
+          if (char !== "Imp") bereitsAusgewaehlt.push(char);
+        }
+      });
+      if (bereitsAusgewaehlt.length) {
+        items = items.filter(it => !bereitsAusgewaehlt.includes(it));
+      }
+    }
+  } else if (modus === "aktion") {
     items = aktionenListe;
     title.textContent = "Aktion wählen";
+  } else if (modus === "zahl") {
+    title.textContent = "Zahl wählen";
+    const max = (zielFeld && zielFeld.placeholder && zielFeld.placeholder.includes("0 und 2")) ? 2 : 4;
+    for (let i = 0; i <= max; i++) items.push(i.toString());
   }
 
   items.forEach(item => {
     const btn = document.createElement("button");
-    btn.textContent = item;
+
+    if (modus === "charakter" && spieler[item]) {
+      btn.textContent = item + " (" + spieler[item] + ")";
+      // Hervorhebungen: falls dieser char als falsche Fährte / trunkenbold zugewiesen ist
+      if (falscheFaehrte === item) btn.classList.add("falsche-faehrte");
+      if (trunkenbold === item) btn.classList.add("trunkenbold");
+    } else {
+      btn.textContent = item;
+    }
+
     btn.onclick = () => {
-      zielFeld.value = item;
+      // setzen des sichtbaren Wertes
+      zielFeld.value = item + (spieler[item] ? ` (${spieler[item]})` : "");
       zielFeld.classList.add("auswahl-bestaetigt");
       setTimeout(() => zielFeld.classList.remove("auswahl-bestaetigt"), 600);
       schliessePopup();
@@ -522,123 +432,185 @@ function oeffnePopup(zielFeld, modus, charName = null) {
 }
 
 function schliessePopup() {
-  document.getElementById("popup").style.display="none";
-  aktuellesZielFeld=null;
-  popupModus=null;
+  document.getElementById("popup").style.display = "none";
+  aktuellesZielFeld = null;
+  popupModus = null;
+  aktuelleAktionDiv = null;
 }
 
-function toggleBereich(id) {
-  const bereich = document.getElementById(id);
-  const header = bereich.previousElementSibling;
-  if (bereich.style.display === "none") {
-    bereich.style.display = "block";
-    header.classList.remove("collapsed");
-    header.classList.add("expanded");
-  } else {
-    bereich.style.display = "none";
-    header.classList.remove("expanded");
-    header.classList.add("collapsed");
-  }
+function zeigeCharakter(ch){
+    const name = spieler[ch] ? ` (${spieler[ch]})` : "";
+    let farbe = "";
+    if(ch==="Falsche Fährte"){
+        const cb=document.querySelector(`#spieler-inhalt input[type=checkbox][data-char='Falsche Fährte']`);
+        if(cb && cb.checked){ farbe="color:#FFD700; font-weight:bold;"; }
+    }
+    if(ch==="Trunkenbold"){
+        const cb=document.querySelector(`#spieler-inhalt input[type=checkbox][data-char='Trunkenbold']`);
+        if(cb && cb.checked){ farbe="color:#00BFFF; font-weight:bold;"; }
+    }
+    return `<span style="${farbe}">${ch}${name}</span>`;
 }
 
-function neueAktion(vorwahlChar = null, vorwahlAktion = null) {
+
+/* ---------- Aktionen erstellen ---------- */
+function neueAktion() {
   const div = document.createElement("div");
   div.className = "aktion";
 
-  // Ersetzen Sie die Select-Elemente durch Input-Felder mit Popup-Funktionalität
   const feld1 = document.createElement("input");
   feld1.readOnly = true;
   feld1.placeholder = "Charakter wählen…";
-  feld1.onclick = () => oeffnePopup(feld1, "charakter");
+  feld1.onclick = () => oeffnePopup(feld1, "charakter", null, div);
 
   const feldAktion = document.createElement("input");
   feldAktion.readOnly = true;
   feldAktion.placeholder = "Aktion wählen…";
-  feldAktion.onclick = () => {
-    const charName = feld1.value.split(" (")[0];
-    oeffnePopup(feldAktion, "aktion", charName);
-  };
+  feldAktion.onclick = () => oeffnePopup(feldAktion, "aktion", null, div);
 
   const feld2 = document.createElement("input");
   feld2.readOnly = true;
   feld2.placeholder = "Ziel wählen…";
-  feld2.onclick = () => oeffnePopup(feld2, "charakter");
+  feld2.onclick = () => oeffnePopup(feld2, "charakter", null, div);
 
-  const feld3 = document.createElement("input");
-  feld3.readOnly = true;
-  feld3.placeholder = "Weiterer Charakter…";
-  feld3.onclick = () => oeffnePopup(feld3, "charakter");
-
-  // Vorbelegung wenn Parameter übergeben
-  if (vorwahlChar) {
-    feld1.value = vorwahlChar + (spieler[vorwahlChar] ? ` (${spieler[vorwahlChar]})` : "");
-  }
-  if (vorwahlAktion) {
-    feldAktion.value = vorwahlAktion;
-  }
-
-  // Delete-Button hinzufügen
   const delBtn = document.createElement("button");
   delBtn.textContent = "Löschen";
   delBtn.className = "del-btn";
-  delBtn.onclick = () => { div.remove(); neuNummerieren(); };
+  delBtn.onclick = () => { div.remove(); };
 
-  // Zusammenbauen
   div.appendChild(feld1);
   div.appendChild(feldAktion);
   div.appendChild(feld2);
-  div.appendChild(erstelleErgaenzungsfeld());
-  div.appendChild(feld3);
   div.appendChild(erstelleErgaenzungsfeld());
   div.appendChild(delBtn);
 
   document.getElementById("aktionen").appendChild(div);
 }
+
+/* Standardaktionen (erzeugt komplexe Reihen) */
+function neueStandardAktion(charakter, ...teile) {
+  const div = document.createElement("div");
+  div.className = "aktion";
+  const felder = [];
+
+  for (let i = 0; i < teile.length; i++) {
+    const t = teile[i];
+    if (t === "Charakter auswählen") {
+      const fld = document.createElement("input");
+      fld.readOnly = true;
+      fld.placeholder = "Charakter wählen…";
+      fld.onclick = () => oeffnePopup(fld, "charakter", null, div);
+      div.appendChild(fld);
+      felder.push(fld);
+    } else if (t === "Zahl zwischen 0 und 4" || t === "Zahl zwischen 0 und 2") {
+      const fld = document.createElement("input");
+      fld.readOnly = true;
+      fld.placeholder = "Zahl wählen…";
+      fld.onclick = () => oeffnePopup(fld, "zahl", null, div);
+      div.appendChild(fld);
+      felder.push(fld);
+    } else {
+      const span = document.createElement("span");
+      span.textContent = t;
+      span.style.margin = "0 6px";
+      div.appendChild(span);
+    }
+  }
+
+  // Als erster sichtbarer Eintrag: der Charakter selbst (mit Spielername, falls vorhanden)
+  if (felder.length > 0) {
+    felder[0].value = charakter + (spieler[charakter] ? ` (${spieler[charakter]})` : "");
+  } else {
+    // Wenn gar keine Felder erzeugt wurden, legen wir trotzdem den Akteur sichtbar an:
+    const fld = document.createElement("input");
+    fld.readOnly = true;
+    fld.placeholder = "Charakter (Akteur)";
+    fld.value = charakter + (spieler[charakter] ? ` (${spieler[charakter]})` : "");
+    div.insertBefore(fld, div.firstChild);
+  }
+
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "Löschen";
+  delBtn.className = "del-btn";
+  delBtn.onclick = () => div.remove();
+  div.appendChild(delBtn);
+
+  document.getElementById("aktionen").appendChild(div);
+}
+
+/* ---------- Runde speichern / Historie ---------- */
 function rundeSpeichern() {
   const aktionen = Array.from(document.querySelectorAll("#aktionen .aktion")).map(a => {
-    const inputs = a.querySelectorAll("input");
-    const [ch1, act, ch2, ch3] = Array.from(inputs).slice(0, 4); // Erste 4 Input-Felder
-    const ergFields = a.querySelectorAll("input[type='text']"); // Ergänzungsfelder
-    const erg1 = ergFields[0] ? ergFields[0].value : "";
-    const erg2 = ergFields[1] ? ergFields[1].value : "";
-    return `${ch1.value} ${act.value} ${ch2.value} ${erg1} ${ch3.value} ${erg2}`;
+    // Zusammensetzen: wechsle durch childNodes und fange Texte/Inputs ab
+    let parts = [];
+    a.childNodes.forEach(node => {
+      if (node.nodeType === Node.TEXT_NODE) {
+        const t = node.textContent.trim();
+        if (t) parts.push(t);
+      } else if (node.tagName === "SPAN") {
+        parts.push(node.textContent.trim());
+      } else if (node.tagName === "INPUT") {
+        parts.push((node.value || "").trim());
+      }
+    });
+    return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim();
   });
+
   const notizen = document.getElementById("notizen").value;
-  historie.push({runde, aktionen, notizen});
+  historie.push({ runde, aktionen, notizen });
   localStorage.setItem("historie", JSON.stringify(historie));
+
+  // nächste Runde vorbereiten
   runde++;
   document.getElementById("rundenanzeige").textContent = "Runde " + runde;
   document.getElementById("aktionen").innerHTML = "";
   document.getElementById("notizen").value = "";
   aktualisiereHistorie();
 
-  // --- Standardaktionen ab Runde 2 ---
+  // Standardaktionen ab Runde 2 (Trunkenbold bleibt ausgeschlossen)
+  const text = `${zeigeCharakter("Waschweib")} erfährt ${zeigeCharakter("SpielerA")} und ${zeigeCharakter("SpielerB")}`;
   if (runde >= 2) {
-    if (ausgewaehlteCharaktere.includes("Giftmischer")) neueAktion("Giftmischer", "vergiftet");
-    if (ausgewaehlteCharaktere.includes("Mönch")) neueAktion("Mönch", "beschützt");
-	if (ausgewaehlteCharaktere.includes("Imp")) neueAktion("Imp", "tötet");
-	if (ausgewaehlteCharaktere.includes("Rabenhüter")) neueAktion("Mönch", "beschützt");
-	if (ausgewaehlteCharaktere.includes("Empath")) neueAktion("Empath", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Wahrsagerin")) neueAktion("Wahrsagerin", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Totengräber")) neueAktion("Totengräber", "bekommt Info über");
-	if (ausgewaehlteCharaktere.includes("Butler")) neueAktion("Butler", "wird Butler von");
+    if (ausgewaehlteCharaktere.includes("Giftmischer")) neueStandardAktion("Giftmischer","Giftmischer hat","Charakter auswählen","vergiftet");
+    if (ausgewaehlteCharaktere.includes("Mönch")) neueStandardAktion("Mönch","Mönch schützt","Charakter auswählen");
+    if (ausgewaehlteCharaktere.includes("Imp")) neueStandardAktion("Imp","Imp tötet","Charakter auswählen");
+    if (ausgewaehlteCharaktere.includes("Rabenhüter")) neueStandardAktion("Rabenhüter","Rabenhüter ist gestorben und hat die Identität von","Charakter auswählen","erfahren");
+    if (ausgewaehlteCharaktere.includes("Empath")) neueStandardAktion("Empath","Empath bekommt die Information, dass","Zahl zwischen 0 und 2","böse Charaktere neben ihm sitzen");
+    if (ausgewaehlteCharaktere.includes("Wahrsagerin")) neueStandardAktion("Wahrsagerin","Wahrsagerin bekommt die Info, dass von","Charakter auswählen","und","Charakter auswählen","der Dämon dabei ist/der Dämon nicht dabei ist");
+    if (ausgewaehlteCharaktere.includes("Totengräber")) neueStandardAktion("Totengräber","Totengräber bekommt die Information, dass","Charakter auswählen","durch Hinrichtung gestorben ist");
+    if (ausgewaehlteCharaktere.includes("Butler")) neueStandardAktion("Butler","Butler hat","Charakter auswählen","als Meister gewählt");
   }
 }
 
-// Historie verwalten
+/* ---------- Historie darstellen (mit Hervorhebung) ---------- */
 function aktualisiereHistorie() {
   const liste = document.getElementById("historie-liste");
   liste.innerHTML = "";
+
   historie.forEach(h => {
     const div = document.createElement("div");
     div.className = "runde-box";
-    div.innerHTML = `<h3>Runde ${h.runde}</h3>
-      <ul>${h.aktionen.map(a => `<li>${a}</li>`).join("")}</ul>
-      <p><strong>Notizen:</strong> ${h.notizen}</p>`;
+
+    let html = `<h3>Runde ${h.runde}</h3><ul>`;
+    h.aktionen.forEach(a => {
+      let item = a;
+      // Markiere falscheFaehrte und trunkenbold (falls vorkommend) optisch
+      if (falscheFaehrte) {
+        const re = new RegExp(escapeRegExp(falscheFaehrte), "g");
+        item = item.replace(re, `<span class="falsche-faehrte">${falscheFaehrte}</span>`);
+      }
+      if (trunkenbold) {
+        const re2 = new RegExp(escapeRegExp(trunkenbold), "g");
+        item = item.replace(re2, `<span class="trunkenbold">${trunkenbold}</span>`);
+      }
+      html += `<li>${item}</li>`;
+    });
+    html += `</ul><p><strong>Notizen:</strong> ${h.notizen || ""}</p>`;
+    div.innerHTML = html;
     liste.appendChild(div);
   });
 }
 
+function escapeRegExp(string) { return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
 function rundeRueckgaengig() {
   if (historie.length > 0 && confirm("Letzte Runde wirklich löschen?")) {
@@ -662,20 +634,21 @@ function charaktereZuruecksetzen() {
   if (confirm("Charaktere und Spielernamen wirklich zurücksetzen?")) {
     localStorage.removeItem("charaktere");
     localStorage.removeItem("spieler");
+    localStorage.removeItem("falscheFaehrte");
+    localStorage.removeItem("trunkenbold");
     ausgewaehlteCharaktere = [];
     spieler = {};
+    falscheFaehrte = null;
+    trunkenbold = null;
     location.reload();
   }
 }
 
-// Initial laden
+/* ---------- Initialisierung ---------- */
 ladeCharaktere();
 if (ausgewaehlteCharaktere.length > 0) zeigeSpielerZuweisung();
 if (Object.keys(spieler).length > 0) document.getElementById("runde-bereich").style.display = "block";
 aktualisiereHistorie();
 </script>
-
-
-
 </body>
 </html>

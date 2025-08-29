@@ -136,6 +136,21 @@
       box-shadow: 0 0 12px rgba(255, 221, 0, 0.6);
       color: #ffffff;
     }
+	
+	/* Markierung für Trunkenbold */
+.tb-label {
+  color: #d4aa00;         /* warmes Gelb */
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* Markierung für Falsche Fährte */
+.ff-label {
+  color: #b22222;         /* kräftiges Rot */
+  font-weight: bold;
+  margin-left: 4px;
+}
+
 
     #charaktere-liste { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:6px 12px; }
 
@@ -299,6 +314,9 @@ function zeigeSpielerZuweisung() {
   container.innerHTML = "";
 
   ausgewaehlteCharaktere.forEach(ch => {
+    // Trunkenbold ist passiv → kein Namensfeld
+    if (ch === "Trunkenbold") return;
+
     const row = document.createElement("div");
     row.className = "checkbox-container";
 
@@ -329,15 +347,11 @@ function zeigeSpielerZuweisung() {
       
       button.onclick = () => {
         if (falscheFaehrte === ch) {
-          // Button war bereits aktiv -> deaktivieren
           falscheFaehrte = null;
           button.classList.remove("active");
         } else {
-          // Button aktivieren
           falscheFaehrte = ch;
           button.classList.add("active");
-          
-          // Andere Falsche-Fährte-Buttons zurücksetzen
           document.querySelectorAll('#zuweisungen button.ff-button').forEach(other => {
             if (other !== button) {
               other.classList.remove("active");
@@ -365,15 +379,11 @@ function zeigeSpielerZuweisung() {
       
       button.onclick = () => {
         if (trunkenbold === ch) {
-          // Button war bereits aktiv -> deaktivieren
           trunkenbold = null;
           button.classList.remove("active");
         } else {
-          // Button aktivieren
           trunkenbold = ch;
           button.classList.add("active");
-          
-          // Andere Trunkenbold-Buttons zurücksetzen
           document.querySelectorAll('#zuweisungen button.tb-button').forEach(other => {
             if (other !== button) {
               other.classList.remove("active");
@@ -390,6 +400,7 @@ function zeigeSpielerZuweisung() {
     container.appendChild(row);
   });
 }
+
 
 /* ---------- Speichern Spieler & Start Aktionen ---------- */
 function speichereCharaktere() {
@@ -439,6 +450,7 @@ function speichereSpieler() {
     }
   }
 }
+
 
 /* ---------- Popup für Auswahl (Charakter / Aktion / Zahl) ---------- */
 let aktuellesZielFeld = null;
@@ -658,16 +670,32 @@ function rundeSpeichern() {
 
   // Standardaktionen ab Runde 2 (Trunkenbold bleibt ausgeschlossen)
   
-  if (runde >= 2) {
- 
-    if (ausgewaehlteCharaktere.includes("Giftmischer")) neueStandardAktion("Giftmischer","Giftmischer hat","Charakter auswählen","vergiftet");
-    if (ausgewaehlteCharaktere.includes("Mönch")) neueStandardAktion("Mönch","Mönch schützt","Charakter auswählen");
-    if (ausgewaehlteCharaktere.includes("Imp")) neueStandardAktion("Imp","Imp tötet","Charakter auswählen");
-    if (ausgewaehlteCharaktere.includes("Rabenhüter")) neueStandardAktion("Rabenhüter","Rabenhüter ist gestorben und hat die Identität von","Charakter auswählen","erfahren");
-    if (ausgewaehlteCharaktere.includes("Empath")) neueStandardAktion("Empath","Empath bekommt die Information, dass","Zahl zwischen 0 und 2","böse Charaktere neben ihm sitzen");
-    if (ausgewaehlteCharaktere.includes("Wahrsagerin")) neueStandardAktion("Wahrsagerin","Wahrsagerin bekommt die Info, dass von","Charakter auswählen","and","Charakter auswählen","der Dämon dabei ist/der Dämon nicht dabei ist");
-    if (ausgewaehlteCharaktere.includes("Totengräber")) neueStandardAktion("Totengräber","Totengräber bekommt die Information, dass","Charakter auswählen","durch Hinrichtung gestorben ist");
-    if (ausgewaehlteCharaktere.includes("Butler")) neueStandardAktion("Butler","Butler hat","Charakter auswählen","als Meister gewählt");
+  if (runde === 2) {
+    // Nur für bestimmte aktive Rollen: (Trunkenbold bewusst ausgelassen)
+    if (ausgewaehlteCharaktere.includes("Giftmischer")) {
+      neueStandardAktion("Giftmischer", "Giftmischer hat", "Charakter auswählen", "vergiftet");
+    }
+    if (ausgewaehlteCharaktere.includes("Mönch")) {
+      neueStandardAktion("Mönch","Mönch schützt","Charakter auswählen");
+    }
+    if (ausgewaehlteCharaktere.includes("Imp")) {
+      neueStandardAktion("Imp","Imp tötet","Charakter auswählen");
+    }
+    if (ausgewaehlteCharaktere.includes("Rabenhüter")) {
+      neueStandardAktion("Rabenhüter","Rabenhüter ist gestorben und hat die Identität von","Charakter auswählen","erfahren");
+    }
+    if (ausgewaehlteCharaktere.includes("Empath")) {
+      neueStandardAktion("Empath","Empath bekommt die Information, dass","Zahl zwischen 0 und 2","böse Charaktere neben ihm sitzen");
+    }
+	if (ausgewaehlteCharaktere.includes("Wahrsagerin")) {
+    neueStandardAktion("Wahrsagerin", "Wahrsagerin bekommt die Info, dass von","Charakter auswählen","und","Charakter auswählen","der", "Imp-Auswahl", "ist");
+     }
+	if (ausgewaehlteCharaktere.includes("Totengräber")) {
+      neueStandardAktion("Totengräber","Totengräber bekommt die Information, dass","Charakter auswählen","durch Hinrichtung gestorben ist");
+    }
+    if (ausgewaehlteCharaktere.includes("Butler")) {
+      neueStandardAktion("Butler", "Butler hat", "Charakter auswählen", "als Meister gewählt");
+    }
   }
 }
 
